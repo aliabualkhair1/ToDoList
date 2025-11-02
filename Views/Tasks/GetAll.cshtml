@@ -1,0 +1,38 @@
+﻿@using ToDoListAPIs.Entities
+@model IEnumerable<TaskEntity>
+
+@{
+    ViewData["Title"] = "Todo List";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-controller="Tasks" asp-action="AddTask" method="post" class="my-3">
+    <input type="text" name="text" placeholder="Add a new todo..." required class="form-control w-50 d-inline" />
+    <button type="submit" class="btn btn-primary">Add</button>
+    @Html.AntiForgeryToken()
+</form>
+
+<hr />
+
+<ul class="list-group mt-3">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>@item.Text</span>
+
+                <form asp-controller="Tasks" asp-action="DeleteTask" method="post" style="display:inline">
+                    <input type="hidden" name="text" value="@item.Text" />
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    @Html.AntiForgeryToken()
+                </form>
+            </li>
+        }
+    }
+    else
+    {
+        <li class="list-group-item text-muted">No tasks yet.</li>
+    }
+</ul>
